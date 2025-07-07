@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infográfico: Otimização de Anúncios com Testes A/B</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7F7F7;
+            color: #073B4C;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .stat-card {
+            background-color: #FFFFFF;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease-in-out;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .section-title {
+            color: #118AB2; /* Blue Munsell */
+            border-bottom: 3px solid #FFD166; /* Sunglow Yellow */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .flowchart-step {
+            background-color: #E0F2FE; /* Light blue for steps */
+            border: 2px solid #118AB2; /* Blue Munsell */
+            color: #073B4C;
+        }
+        .flowchart-arrow {
+            color: #118AB2; /* Blue Munsell */
+        }
+         .kpi-card {
+            background-color: #FFFFFF;
+            border-left: 5px solid #06D6A0; /* Caribbean Green */
+        }
+        .tip-card {
+            background-color: #FFFBEB; /* Light yellow for tips */
+            border-left: 5px solid #FFD166; /* Sunglow Yellow */
+        }
+        /* Palette: Energetic & Playful
+           Primary: #FF6B6B (Coral Red)
+           Secondary: #FFD166 (Sunglow Yellow)
+           Accent 1: #06D6A0 (Caribbean Green)
+           Accent 2: #118AB2 (Blue Munsell)
+           Background/Neutral: #F7F7F7 (Light Gray), #FFFFFF (White)
+           Text: #073B4C (Midnight Green - dark blue/teal for text)
+        */
+    </style>
+</head>
+<body class="antialiased">
+
+    <!--
+        Narrative Plan & Structure:
+        1.  Título e Introdução: O que é Teste A/B e sua importância para anúncios.
+        2.  Por Que Testar?: Benefícios da abordagem data-driven.
+        3.  A Metodologia Chave: Como realizar testes A/B eficazes (Hipóteses, Variação Única, Amostra, Duração).
+        4.  Métricas Essenciais (KPIs): O que medir para avaliar o sucesso (CTR, Conversão, CPA). Visualização de exemplo.
+        5.  O Que Você Pode Testar?: Elementos de anúncios para otimização (Copy, Visuais, CTAs).
+        6.  Gerador de Hipóteses (NOVO): Ferramenta LLM para criar hipóteses de teste A/B.
+        7.  Plataformas Populares: Onde executar seus testes (Google Ads, Facebook Ads, LinkedIn Ads).
+        8.  O Ciclo de Otimização Contínua: Análise, Iteração e Aprendizado.
+        9.  Conclusão: Próximos passos e o poder da melhoria contínua.
+
+        Visualization Choices & Justifications (NO SVG, NO MERMAID JS):
+        -   Introdução: Texto e um ícone simples (Unicode).
+        -   Benefícios: Lista estilizada com ícones (Unicode) em cards. Goal: Inform. Method: HTML/CSS.
+        -   Metodologia:
+            -   Fluxo Simplificado (Hipótese -> Variação -> Análise): Diagrama com HTML/CSS (flexbox, borders). Goal: Organize. Method: HTML/CSS.
+            -   Variação Única: Diagrama comparativo simples (HTML/CSS). Goal: Compare. Method: HTML/CSS.
+        -   KPIs:
+            -   Tabela de KPIs: HTML `<table>` (já presente no relatório). Goal: Organize. Method: HTML/CSS.
+            -   Gráfico de Barras (Exemplo CTR): Chart.js Canvas. Goal: Compare. Method: Chart.js.
+        -   O Que Testar: Cards estilizados (HTML/CSS) para Títulos, Descrições, CTAs. Goal: Inform. Method: HTML/CSS.
+        -   Gerador de Hipóteses: Formulário de entrada (HTML/CSS) e exibição de texto gerado por LLM. Goal: Inform/Organize. Method: LLM (Gemini API) + HTML/CSS.
+        -   Plataformas: Cards com nomes e breves descrições. Goal: Inform. Method: HTML/CSS.
+        -   Ciclo de Otimização: Diagrama circular simples (HTML/CSS com borders e positioning). Goal: Organize. Method: HTML/CSS.
+        -   Conclusão: Texto.
+
+        Confirmation: NEITHER Mermaid JS NOR SVG were used anywhere in this output.
+    -->
+
+    <header class="bg-[#118AB2] text-white py-8 shadow-lg">
+        <div class="container mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2">Decifrando o Sucesso dos Anúncios</h1>
+            <p class="text-xl md:text-2xl font-light">Um Guia Visual para Testes A/B e Otimização Contínua</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 md:p-8">
+
+        <section id="introducao" class="mb-12">
+            <div class="stat-card text-center">
+                <h2 class="text-3xl font-bold section-title inline-block">🎯 O Que São Testes A/B?</h2>
+                <p class="mt-4 text-lg leading-relaxed">
+                    Testes A/B (ou "split testing") são como experimentos científicos para seus anúncios. Você cria duas versões de um anúncio (A e B), mudando apenas UM elemento (como o título ou a imagem). Depois, você mostra cada versão para um segmento do seu público e vê qual delas performa melhor em relação a um objetivo específico, como cliques ou conversões.
+                </p>
+                <p class="mt-4 text-lg leading-relaxed">
+                    Essa abordagem elimina achismos e permite que você tome decisões baseadas em dados concretos, otimizando seus investimentos e maximizando resultados. É a chave para entender o que realmente funciona com sua audiência.
+                </p>
+            </div>
+        </section>
+
+        <section id="beneficios" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">✨ Por Que Adotar Testes A/B?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="stat-card border-l-4 border-[#FF6B6B]">
+                    <h3 class="text-xl font-semibold text-[#FF6B6B] mb-2">📈 Melhora de Desempenho</h3>
+                    <p>Aumente taxas de cliques (CTR), conversões e outras métricas importantes ao identificar os elementos mais eficazes.</p>
+                </div>
+                <div class="stat-card border-l-4 border-[#FFD166]">
+                    <h3 class="text-xl font-semibold text-[#FFD166] mb-2">💰 Redução de Custos</h3>
+                    <p>Otimize o Custo por Aquisição (CPA) e o Retorno sobre o Gasto em Publicidade (ROAS) direcionando o orçamento para o que funciona.</p>
+                </div>
+                <div class="stat-card border-l-4 border-[#06D6A0]">
+                    <h3 class="text-xl font-semibold text-[#06D6A0] mb-2">🧠 Entendimento do Público</h3>
+                    <p>Descubra quais mensagens, ofertas e visuais mais ressoam com sua audiência, aprofundando seu conhecimento sobre ela.</p>
+                </div>
+                <div class="stat-card border-l-4 border-[#118AB2] md:col-span-1 lg:col-span-1">
+                     <h3 class="text-xl font-semibold text-[#118AB2] mb-2">💡 Decisões Baseadas em Dados</h3>
+                    <p>Substitua suposições por evidências concretas, tomando decisões de marketing mais inteligentes e seguras.</p>
+                </div>
+                <div class="stat-card border-l-4 border-[#FF6B6B] md:col-span-1 lg:col-span-1">
+                    <h3 class="text-xl font-semibold text-[#FF6B6B] mb-2">🔄 Otimização Contínua</h3>
+                    <p>Crie um ciclo de aprendizado e melhoria constantes, adaptando-se às mudanças de comportamento do consumidor.</p>
+                </div>
+                 <div class="stat-card border-l-4 border-[#FFD166] md:col-span-2 lg:col-span-1">
+                    <h3 class="text-xl font-semibold text-[#FFD166] mb-2">🚀 Inovação com Menos Risco</h3>
+                    <p>Teste novas ideias e abordagens de forma controlada antes de implementá-las em larga escala.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="metodologia" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">🛠️ A Receita do Teste A/B Eficaz</h2>
+            <p class="text-center text-lg mb-8">Seguir uma metodologia clara é crucial para obter resultados confiáveis e acionáveis. Veja os pilares:</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold text-[#06D6A0] mb-3">1. Hipótese Clara e Objetivo Mensurável</h3>
+                    <p class="mb-2">Antes de tudo, defina o que você espera alcançar e por quê. Ex: "Acreditamos que mudar o CTA de 'Saiba Mais' para 'Baixe o Guia Agora' (X) aumentará a taxa de conversão em 20% (objetivo) porque oferece um valor mais tangível (Y)."</p>
+                    <div class="mt-4 p-3 bg-gray-100 rounded-md">
+                        <p class="font-semibold">Exemplo de Hipótese:</p>
+                        <p class="text-sm">"Acreditamos que usar um título focado na dor <span class='font-bold text-[#FF6B6B]'>'Sua equipe depende de você pra tudo?'</span> (Anúncio 1) terá um CTR maior do que um título focado na solução, pois gera identificação imediata."</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold text-[#06D6A0] mb-3">2. O Princípio da Variação Única</h3>
+                    <p>Teste <span class="font-bold text-[#FF6B6B]">apenas UM elemento por vez</span>. Se você mudar o título E a imagem ao mesmo tempo, como saberá qual mudança causou o impacto no resultado? Isolar a variável é fundamental.</p>
+                    <div class="mt-4 flex justify-around items-center p-3 bg-gray-100 rounded-md">
+                        <div class="text-center">
+                            <p class="font-semibold">Anúncio A (Controle)</p>
+                            <div class="p-2 border border-gray-300 rounded mt-1 bg-white">Título Original</div>
+                            <div class="p-2 border border-gray-300 rounded mt-1 bg-white">Imagem Original</div>
+                        </div>
+                        <div class="text-2xl flowchart-arrow mx-2">➡️</div>
+                        <div class="text-center">
+                            <p class="font-semibold">Anúncio B (Variante)</p>
+                            <div class="p-2 border border-dashed border-[#FF6B6B] rounded mt-1 bg-white font-bold text-[#FF6B6B]">Novo Título</div>
+                            <div class="p-2 border border-gray-300 rounded mt-1 bg-white">Imagem Original</div>
+                        </div>
+                    </div>
+                     <p class="text-xs text-center mt-2">Aqui, apenas o título foi alterado.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold text-[#06D6A0] mb-3">3. Amostra Significativa e Validade Estatística</h3>
+                    <p>Seu teste precisa de um público grande o suficiente para que os resultados sejam confiáveis e não apenas fruto do acaso. Use calculadoras de tamanho de amostra e busque significância estatística (geralmente 95% de confiança) para validar suas conclusões.</p>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold text-[#06D6A0] mb-3">4. Duração Adequada do Teste</h3>
+                    <p>Deixe o teste rodar por tempo suficiente para coletar dados representativos e minimizar o impacto de flutuações diárias. Para anúncios digitais, isso pode variar de alguns dias a semanas, dependendo do volume de tráfego e do orçamento.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="kpis" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">📊 Medindo o Sucesso: KPIs Cruciais</h2>
+            <p class="text-center text-lg mb-8">Escolha UMA métrica principal para determinar o vencedor do teste, mas acompanhe outras para um entendimento completo.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="md:col-span-2">
+                    <div class="stat-card overflow-x-auto">
+                        <h3 class="text-xl font-semibold text-[#118AB2] mb-4">Principais Indicadores de Desempenho (KPIs)</h3>
+                        <table class="w-full min-w-max text-left">
+                            <thead>
+                                <tr class="border-b border-gray-300">
+                                    <th class="py-3 px-4 font-semibold text-[#073B4C]">KPI</th>
+                                    <th class="py-3 px-4 font-semibold text-[#073B4C]">O que ela indica</th>
+                                    <th class="py-3 px-4 font-semibold text-[#073B4C]">Como Calcular</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">Taxa de Cliques (CTR)</td>
+                                    <td class="py-3 px-4">Relevância e atratividade do anúncio.</td>
+                                    <td class="py-3 px-4 text-sm">(Cliques / Impressões) x 100</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">Taxa de Conversão</td>
+                                    <td class="py-3 px-4">Eficácia da mensagem e da página de destino.</td>
+                                    <td class="py-3 px-4 text-sm">(Conversões / Visitantes) x 100</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">Custo por Aquisição (CPA)</td>
+                                    <td class="py-3 px-4">Eficiência do investimento para adquirir um cliente/lead.</td>
+                                    <td class="py-3 px-4 text-sm">Custo Total / Aquisições</td>
+                                </tr>
+                                 <tr class="border-b border-gray-200 hover:bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">ROAS</td>
+                                    <td class="py-3 px-4">Retorno financeiro do investimento em publicidade.</td>
+                                    <td class="py-3 px-4 text-sm">Receita / Custo Total</td>
+                                </tr>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="py-3 px-4 font-medium">Custo por Clique (CPC)</td>
+                                    <td class="py-3 px-4">Custo médio de cada clique no anúncio.</td>
+                                    <td class="py-3 px-4 text-sm">Custo Total / Cliques</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <h3 class="text-xl font-semibold text-[#118AB2] mb-4">Exemplo Visual: Comparando CTRs</h3>
+                    <p class="text-sm mb-4">Imagine que testamos duas versões do "Anúncio 2", variando o título. O gráfico abaixo mostra um resultado hipotético onde a Variação B teve um CTR maior.</p>
+                    <div class="chart-container h-[250px] md:h-[300px]">
+                        <canvas id="ctrComparisonChart"></canvas>
+                    </div>
+                    <p class="text-xs text-center mt-2">Neste cenário, a Variação B seria a vencedora para o KPI de CTR.</p>
+                </div>
+                 <div class="stat-card tip-card">
+                    <h3 class="text-xl font-semibold text-[#FFD166] mb-3">💡 Dica de Ouro!</h3>
+                    <p>Concentre-se em <span class="font-bold">uma métrica primária</span> para decidir o vencedor do teste. Outras métricas podem fornecer contexto, mas a clareza na métrica principal evita confusão e garante que você otimize para o objetivo mais importante da campanha.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="elementos" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">🔍 O Que Você Pode Testar nos Seus Anúncios?</h2>
+            <p class="text-center text-lg mb-8">Praticamente qualquer elemento do seu anúncio pode ser testado! Foque nos que têm maior potencial de impacto.</p>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="stat-card kpi-card">
+                    <h3 class="text-xl font-semibold text-[#073B4C] mb-2">📝 Títulos (Headlines)</h3>
+                    <p>É a primeira coisa que as pessoas veem. Teste:</p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                        <li>Foco na dor vs. foco na solução</li>
+                        <li>Perguntas vs. afirmações</li>
+                        <li>Uso de números ou estatísticas</li>
+                        <li>Diferentes gatilhos emocionais</li>
+                    </ul>
+                    <p class="text-xs mt-3 p-2 bg-gray-100 rounded">Ex: "Sua equipe depende de você?" vs. "Lidere sem sobrecarga!"</p>
+                </div>
+                <div class="stat-card kpi-card">
+                    <h3 class="text-xl font-semibold text-[#073B4C] mb-2">📄 Texto do Anúncio (Descrição)</h3>
+                    <p>O corpo do anúncio. Teste:</p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                        <li>Comprimento (curto vs. longo)</li>
+                        <li>Tom de voz (formal vs. informal)</li>
+                        <li>Destaque de diferentes benefícios</li>
+                        <li>Uso de emojis ou storytelling</li>
+                    </ul>
+                     <p class="text-xs mt-3 p-2 bg-gray-100 rounded">Ex: "Ferramentas práticas e sem enrolação" vs. "Método comprovado passo a passo".</p>
+                </div>
+                <div class="stat-card kpi-card">
+                    <h3 class="text-xl font-semibold text-[#073B4C] mb-2">👆 Chamada para Ação (CTA)</h3>
+                    <p>O que você quer que o usuário faça. Teste:</p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                        <li>Texto do botão ("Saiba Mais", "Compre Agora")</li>
+                        <li>Cor e design do botão</li>
+                        <li>Posicionamento do CTA</li>
+                        <li>Senso de urgência ("Oferta Limitada!")</li>
+                    </ul>
+                    <p class="text-xs mt-3 p-2 bg-gray-100 rounded">Ex: "Saiba mais" vs. "Baixe o Guia Gratuito".</p>
+                </div>
+                <div class="stat-card kpi-card lg:col-span-1">
+                    <h3 class="text-xl font-semibold text-[#073B4C] mb-2">🖼️ Visuais (Imagens/Vídeos)</h3>
+                    <p>Essencial em muitas plataformas. Teste:</p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                        <li>Diferentes imagens ou vídeos</li>
+                        <li>Pessoas vs. produtos/ilustrações</li>
+                        <li>Cores e estilos visuais</li>
+                        <li>Texto sobreposto na imagem</li>
+                    </ul>
+                </div>
+                <div class="stat-card kpi-card lg:col-span-2">
+                    <h3 class="text-xl font-semibold text-[#073B4C] mb-2">🎯 Segmentação de Audiência</h3>
+                    <p>Para quem o anúncio é mostrado. Teste:</p>
+                    <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                        <li>Interesses e comportamentos</li>
+                        <li>Dados demográficos (idade, localização)</li>
+                        <li>Públicos semelhantes (lookalike)</li>
+                        <li>Combinações de critérios (layering)</li>
+                    </ul>
+                    <p class="text-xs mt-3 p-2 bg-gray-100 rounded">Ex: Testar se a copy do "Anúncio 1" (sobrecarga) funciona melhor para gestores de pequenas empresas versus diretores de grandes corporações.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="gerador-hipoteses" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">✨ Gerador de Hipóteses com IA</h2>
+            <p class="text-center text-lg mb-8">Precisa de uma ideia para seu próximo teste A/B? Deixe a IA te ajudar a formular uma hipótese clara!</p>
+            <div class="stat-card p-6">
+                <div class="mb-4">
+                    <label for="adElement" class="block text-sm font-medium text-gray-700 mb-1">Elemento do Anúncio a Testar:</label>
+                    <input type="text" id="adElement" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#118AB2] focus:ring focus:ring-[#118AB2] focus:ring-opacity-50 p-2" placeholder="Ex: Título, Imagem, CTA, Descrição">
+                </div>
+                <div class="mb-6">
+                    <label for="testGoal" class="block text-sm font-medium text-gray-700 mb-1">Objetivo do Teste:</label>
+                    <select id="testGoal" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-[#118AB2] focus:ring focus:ring-[#118AB2] focus:ring-opacity-50 p-2">
+                        <option value="aumentar a taxa de cliques (CTR)">Aumentar CTR</option>
+                        <option value="aumentar a taxa de conversão">Aumentar Taxa de Conversão</option>
+                        <option value="reduzir o custo por aquisição (CPA)">Reduzir CPA</option>
+                        <option value="melhorar o engajamento">Melhorar Engajamento</option>
+                        <option value="gerar mais leads">Gerar Mais Leads</option>
+                    </select>
+                </div>
+                <button id="generateHypothesisBtn" class="w-full bg-[#FF6B6B] hover:bg-[#FF4B4B] text-white font-bold py-3 px-4 rounded-lg shadow-md transition duration-300 ease-in-out transform hover:scale-105">
+                    Gerar Hipótese ✨
+                </button>
+                <div id="loadingIndicator" class="hidden text-center mt-4 text-gray-500">
+                    Gerando hipótese...
+                </div>
+                <div id="hypothesisOutput" class="mt-6 p-4 bg-gray-50 border border-gray-200 rounded-md text-gray-800 hidden">
+                    <p class="font-semibold text-[#073B4C] mb-2">Sua Hipótese Gerada:</p>
+                    <p id="generatedText" class="text-lg italic"></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="plataformas" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">🚀 Onde Executar Seus Testes A/B?</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="stat-card text-center">
+                    <h3 class="text-2xl font-semibold text-[#118AB2] mb-3">Google Ads</h3>
+                    <p class="text-6xl mb-3">🇬</p>
+                    <p>Oferece "Experimentos" nativos para testar variações de anúncios de texto, display, vídeo e campanhas Performance Max. Ideal para otimizar campanhas na maior rede de pesquisa e display do mundo.</p>
+                </div>
+                <div class="stat-card text-center">
+                    <h3 class="text-2xl font-semibold text-[#118AB2] mb-3">Facebook Ads</h3>
+                     <p class="text-6xl mb-3">🇫</p>
+                    <p>Permite criar testes A/B diretamente no Gerenciador de Anúncios para comparar diferentes criativos, públicos ou posicionamentos. Essencial para alcançar audiências nas plataformas da Meta.</p>
+                </div>
+                <div class="stat-card text-center">
+                    <h3 class="text-2xl font-semibold text-[#118AB2] mb-3">LinkedIn Ads</h3>
+                     <p class="text-6xl mb-3">🇱</p>
+                    <p>Possibilita testar variáveis como copy, segmentação e lances. Crucial para campanhas B2B e para alcançar profissionais específicos. Oferece rotação uniforme de variações.</p>
+                </div>
+            </div>
+            <p class="text-center text-md mt-6">Existem também ferramentas de terceiros como VWO, Optimizely, AB Tasty, que oferecem funcionalidades avançadas, mas as plataformas de anúncios já fornecem ótimos recursos nativos para começar.</p>
+        </section>
+
+        <section id="ciclo" class="mb-12">
+            <h2 class="text-3xl font-bold section-title text-center mb-8">🔄 O Ciclo Virtuoso da Otimização</h2>
+            <p class="text-center text-lg mb-8">O teste A/B não é um evento único, mas um processo contínuo de aprendizado e melhoria.</p>
+            <div class="stat-card">
+                <div class="flex flex-col md:flex-row justify-around items-center space-y-6 md:space-y-0 md:space-x-4">
+                    <div class="text-center flowchart-step p-4 rounded-lg shadow-md w-full md:w-1/4">
+                        <p class="text-2xl mb-2">🧐</p>
+                        <h4 class="font-semibold text-lg">1. Planejar</h4>
+                        <p class="text-sm">Defina hipóteses e objetivos claros.</p>
+                    </div>
+                    <div class="text-3xl flowchart-arrow transform rotate-90 md:rotate-0">➡️</div>
+                    <div class="text-center flowchart-step p-4 rounded-lg shadow-md w-full md:w-1/4">
+                        <p class="text-2xl mb-2">🛠️</p>
+                        <h4 class="font-semibold text-lg">2. Executar</h4>
+                        <p class="text-sm">Crie e rode o teste A/B.</p>
+                    </div>
+                    <div class="text-3xl flowchart-arrow transform rotate-90 md:rotate-0">➡️</div>
+                    <div class="text-center flowchart-step p-4 rounded-lg shadow-md w-full md:w-1/4">
+                        <p class="text-2xl mb-2">📊</p>
+                        <h4 class="font-semibold text-lg">3. Analisar</h4>
+                        <p class="text-sm">Interprete os resultados e identifique o vencedor.</p>
+                    </div>
+                     <div class="text-3xl flowchart-arrow transform rotate-90 md:rotate-0">➡️</div>
+                    <div class="text-center flowchart-step p-4 rounded-lg shadow-md w-full md:w-1/4">
+                        <p class="text-2xl mb-2">💡</p>
+                        <h4 class="font-semibold text-lg">4. Aprender e Iterar</h4>
+                        <p class="text-sm">Implemente o vencedor e use os aprendizados para o próximo teste.</p>
+                    </div>
+                </div>
+                 <p class="text-center text-md mt-6">Documente seus testes! Manter um registro de hipóteses, variações e resultados cria uma base de conhecimento valiosa para otimizações futuras.</p>
+            </div>
+        </section>
+
+        <section id="conclusao" class="text-center py-10 bg-gradient-to-r from-[#06D6A0] to-[#118AB2] text-white rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold mb-4">Transforme Dados em Crescimento Contínuo!</h2>
+            <p class="text-lg mb-6 mx-auto max-w-3xl">
+                Os testes A/B são uma ferramenta poderosa para qualquer profissional de marketing que busca não apenas melhorar o desempenho dos anúncios, mas também entender profundamente sua audiência. Ao adotar uma cultura de experimentação e otimização contínua, você estará sempre um passo à frente, transformando cada campanha em uma oportunidade de aprendizado e crescimento.
+            </p>
+            <p class="text-lg font-semibold">Comece a testar hoje e veja seus resultados decolarem! 🚀</p>
+        </section>
+    </main>
+
+    <footer class="text-center py-8 mt-10 border-t border-gray-300">
+        <p class="text-sm text-gray-600">&copy; <span id="currentYear"></span> Infográfico de Testes A/B. Inspirado no Relatório de Pesquisa.</p>
+    </footer>
+
+    <script>
+        document.getElementById('currentYear').textContent = new Date().getFullYear();
+
+        function wrapLabels(label, maxWidth) {
+            const words = label.split(' ');
+            let currentLine = '';
+            const lines = [];
+            for (const word of words) {
+                if ((currentLine + word).length > maxWidth) {
+                    lines.push(currentLine.trim());
+                    currentLine = '';
+                }
+                currentLine += word + ' ';
+            }
+            lines.push(currentLine.trim());
+            return lines.filter(line => line.length > 0);
+        }
+
+        const originalTooltipTitleCallback = Chart.defaults.plugins.tooltip.callbacks.title;
+
+        const ctrData = {
+            labels: [wrapLabels('Anúncio 2 - Título Original (Controle)', 16), wrapLabels('Anúncio 2 - Novo Título (Variação B)', 16)],
+            datasets: [{
+                label: 'Taxa de Cliques (CTR) %',
+                data: [2.5, 3.8],
+                backgroundColor: [
+                    '#FFD166', // Sunglow Yellow
+                    '#06D6A0'  // Caribbean Green
+                ],
+                borderColor: [
+                    '#EAA200',
+                    '#05A97A'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const ctrConfig = {
+            type: 'bar',
+            data: ctrData,
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'CTR (%)',
+                            color: '#073B4C'
+                        },
+                        ticks: { color: '#073B4C' }
+                    },
+                    x: {
+                        ticks: { color: '#073B4C' }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: '#073B4C',
+                        titleColor: '#FFFFFF',
+                        bodyColor: '#F7F7F7',
+                        callbacks: {
+                            title: function(tooltipItems) {
+                                const item = tooltipItems[0];
+                                let label = item.chart.data.labels[item.dataIndex];
+                                if (Array.isArray(label)) {
+                                  return label.join(' ');
+                                } else {
+                                  return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        if (document.getElementById('ctrComparisonChart')) {
+            new Chart(
+                document.getElementById('ctrComparisonChart'),
+                ctrConfig
+            );
+        }
+
+        // Gemini API Integration for Hypothesis Generation
+        document.getElementById('generateHypothesisBtn').addEventListener('click', async () => {
+            const adElement = document.getElementById('adElement').value;
+            const testGoal = document.getElementById('testGoal').value;
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const hypothesisOutput = document.getElementById('hypothesisOutput');
+            const generatedText = document.getElementById('generatedText');
+
+            if (!adElement) {
+                alert('Por favor, insira o elemento do anúncio a ser testado.');
+                return;
+            }
+
+            loadingIndicator.classList.remove('hidden');
+            hypothesisOutput.classList.add('hidden');
+            generatedText.textContent = '';
+
+            try {
+                const prompt = `Gere uma hipótese de teste A/B para um anúncio digital. O elemento a ser testado é: ${adElement}. O objetivo é: ${testGoal}. Formate a hipótese começando com 'Acreditamos que...' e seja conciso.`;
+                let chatHistory = [];
+                chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+                const payload = { contents: chatHistory };
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+                if (result.candidates && result.candidates.length > 0 &&
+                    result.candidates[0].content && result.candidates[0].content.parts &&
+                    result.candidates[0].content.parts.length > 0) {
+                    const text = result.candidates[0].content.parts[0].text;
+                    generatedText.textContent = text;
+                    hypothesisOutput.classList.remove('hidden');
+                } else {
+                    generatedText.textContent = 'Não foi possível gerar a hipótese. Tente novamente.';
+                    hypothesisOutput.classList.remove('hidden');
+                }
+            } catch (error) {
+                console.error('Erro ao chamar a API Gemini:', error);
+                generatedText.textContent = 'Ocorreu um erro ao gerar a hipótese. Verifique o console para mais detalhes.';
+                hypothesisOutput.classList.remove('hidden');
+            } finally {
+                loadingIndicator.classList.add('hidden');
+            }
+        });
+    </script>
+
+</body>
+</html>
